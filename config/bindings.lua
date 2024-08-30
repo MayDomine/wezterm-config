@@ -21,6 +21,21 @@ local keys = {
    { key = 'p', mods = mod.SUPER, action = 'ActivateCopyMode' },
    { key = 'p', mods = mod.SUPER_SHIFT, action = act.ActivateCommandPalette },
    { key = 'e', mods = mod.SUPER_SHIFT, action = act.ShowLauncher },
+   {
+    key = 'r',
+    mods = mod.SUPER,
+    action = act.PromptInputLine {
+      description = 'Enter new name for tab',
+      action = wezterm.action_callback(function(window, pane, line)
+        -- line will be `nil` if they hit escape without entering anything
+        -- An empty string if they just hit enter
+        -- Or the actual line of text they wrote
+        if line then
+          window:active_tab():set_title(line)
+        end
+      end),
+    },
+   },
    { key = 'e', mods = mod.SUPER, action = act.ShowLauncherArgs({ flags = 'FUZZY|TABS' }) },
    {
       key = 'g',
@@ -73,10 +88,10 @@ local keys = {
    { key = '4',          mods = mod.SUPER,     action = act.ActivateTab(3) },
    { key = '5',          mods = mod.SUPER,     action = act.ActivateTab(4) },
    { key = '6',          mods = mod.SUPER,     action = act.ActivateTab(5) },
-   { key = ',',          mods = mod.SUPER_REV,     action = act.ActivateTabRelative(-1) },
-   { key = '.',          mods = mod.SUPER_REV,     action = act.ActivateTabRelative(1) },
-   { key = '[',          mods = mod.SUPER_REV, action = act.MoveTabRelative(-1) },
-   { key = ']',          mods = mod.SUPER_REV, action = act.MoveTabRelative(1) },
+   { key = ',',          mods = mod.SUPER,     action = act.ActivateTabRelative(-1) },
+   { key = '.',          mods = mod.SUPER,     action = act.ActivateTabRelative(1) },
+   { key = ',',          mods = mod.SUPER_SHIFT, action = act.MoveTabRelative(-1) },
+   { key = '.',          mods = mod.SUPER_SHIFT, action = act.MoveTabRelative(1) },
 
    -- window --
    -- spawn windows
@@ -92,14 +107,14 @@ local keys = {
    },
    {
       key = [[,]],
-      mods = mod.SUPER,
+      mods = mod.SUPER_REV,
       action = wezterm.action_callback(function(window, _pane)
          backdrops:cycle_back(window)
       end),
    },
    {
       key = [[.]],
-      mods = mod.SUPER,
+      mods = mod.SUPER_REV,
       action = wezterm.action_callback(function(window, _pane)
          backdrops:cycle_forward(window)
       end),
@@ -158,6 +173,18 @@ local keys = {
          timemout_miliseconds = 1000,
       }),
    },
+
+   {
+      key = 'q',
+      mods = 'LEADER',
+      action = act.SplitHorizontal({ args = { 'ssh' , 'qiyuan', "-t", "/home/hanxv/.local/share/bin/zellij a sa"}}),
+   },
+
+   {
+      key = 'c',
+      mods = 'LEADER',
+      action = act.SplitHorizontal({ args = { 'ssh' , 'cent'}}),
+   },
    -- resize panes
    {
       key = 'p',
@@ -187,7 +214,12 @@ local key_tables = {
       { key = 'Escape', action = 'PopKeyTable' },
       { key = 'q',      action = 'PopKeyTable' },
    },
-}
+  search_mode = {
+      { key = 'n', mods = mod.SUPER, action = act.CopyMode 'NextMatch' },
+      { key = 'n', mods = mod.SUPER_SHIFT, action = act.CopyMode 'PriorMatch' },
+      { key = 'Escape', mods = "NONE", action = act.CopyMode 'Close' },
+    }
+  }
 
 local mouse_bindings = {
    -- Ctrl-click will open the link under the mouse cursor
@@ -198,10 +230,12 @@ local mouse_bindings = {
    },
 }
 local smart_split_keybindings = require('config.smart-splits').keys
-for k, v in pairs(smart_split_keybindings) do table.insert(keys, 1, v) end
+for k, v in pairs(smart_split_keybindings) do
+   table.insert(keys, 1, v)
+end
 return {
    disable_default_key_bindings = true,
-   leader = { key = 'a', mods = mod.SUPER },
+   leader = { key = 'o', mods = mod.SUPER },
    keys = keys,
    key_tables = key_tables,
    mouse_bindings = mouse_bindings,

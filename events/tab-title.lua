@@ -25,16 +25,16 @@ local _set_process_name = function(s)
    return a:gsub('%.exe$', '')
 end
 
-local _set_title = function(process_name, base_title, max_width, inset)
+local _set_title = function(process_name, base_title, max_width, inset, tab)
    local title
    inset = inset or 6
-
+   process_name = tab.tab_title or process_name
    if process_name:len() > 0 then
       title = process_name .. ' ~ ' .. base_title
    else
       title = base_title
    end
-
+  -- title = tab:get_title()
    if title:len() > max_width - inset then
       local diff = title:len() - max_width + inset
       title = wezterm.truncate_right(title, title:len() - diff)
@@ -69,7 +69,7 @@ M.setup = function()
       local fg
       local process_name = _set_process_name(tab.active_pane.foreground_process_name)
       local is_admin = _check_if_admin(tab.active_pane.title)
-      local title = _set_title(process_name, tab.active_pane.title, max_width, (is_admin and 8))
+      local title = _set_title(process_name, tab.active_pane.title, max_width, (is_admin and 8), tab)
 
       if tab.is_active then
          bg = colors.is_active.bg
