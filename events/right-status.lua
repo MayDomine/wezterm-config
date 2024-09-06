@@ -38,6 +38,8 @@ local colors = {
    battery_bg = 'rgba(0, 0, 0, 0.4)',
    separator_fg = '#74c7ec',
    separator_bg = 'rgba(0, 0, 0, 0.4)',
+   workspace_fg = '#7FB4CA',  -- 新增：workspace 颜色
+   workspace_bg = 'rgba(0, 0, 0, 0.4)',
 }
 
 local __cells__ = {} -- wezterm FormatItems (ref: https://wezfurlong.org/wezterm/config/lua/wezterm/format.html)
@@ -58,6 +60,11 @@ local _push = function(text, icon, fg, bg, separate)
       table.insert(__cells__, { Background = { Color = colors.separator_bg } })
       table.insert(__cells__, { Text = SEPARATOR_CHAR })
    end
+end
+
+local _set_workspace = function(window)
+   local workspace = window:active_workspace()
+   _push(workspace, nf.md_folder, colors.workspace_fg, colors.workspace_bg, true)
 end
 
 local _set_date = function()
@@ -88,6 +95,7 @@ end
 M.setup = function()
    wezterm.on('update-right-status', function(window, _pane)
       __cells__ = {}
+      _set_workspace(window)  -- 新增：设置 workspace
       _set_date()
       _set_battery()
 

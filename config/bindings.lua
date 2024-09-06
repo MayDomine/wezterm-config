@@ -1,6 +1,7 @@
 local wezterm = require('wezterm')
 local platform = require('utils.platform')()
 local backdrops = require('utils.backdrops')
+local ssh = require('plugins.ssh_menu')
 local act = wezterm.action
 
 local mod = {}
@@ -38,7 +39,7 @@ local keys = {
    },
    { key = 'e', mods = mod.SUPER, action = act.ShowLauncherArgs({ flags = 'FUZZY|TABS' }) },
    {
-      key = 'g',
+      key = 'n',
       mods = mod.SUPER,
       action = act.ShowLauncherArgs({ flags = 'FUZZY|WORKSPACES' }),
    },
@@ -77,8 +78,21 @@ local keys = {
 
    -- tabs --
    -- tabs: spawn+close
-   { key = 't',          mods = mod.SUPER,     action = act.SpawnTab('DefaultDomain') },
+   { key = 't',          mods = mod.SUPER,     action = act.SpawnTab('CurrentPaneDomain') },
    { key = 't',          mods = mod.SUPER_REV, action = act.SpawnTab({ DomainName = 'WSL:Ubuntu' }) },
+   { key = 's',          mods = "LEADER", action =  wezterm.action_callback(function(window, pane)
+    ssh.ssh_menu(window, pane, { use_ssh_conf = true , connect_to_host= false, split_in_window = true})
+  end)},
+   { key = 'S',          mods = "LEADER", action =  wezterm.action_callback(function(window, pane)
+    ssh.ssh_menu(window, pane, { use_ssh_conf = true , connect_to_host= false, split_in_window = false})
+  end)},
+   { key = 'c',          mods = "LEADER", action =  wezterm.action_callback(function(window, pane)
+    ssh.ssh_menu(window, pane, { use_ssh_conf = true , connect_to_host= true})
+  end)},
+   { key = 't',          mods = "LEADER", action =  wezterm.action_callback(function(window, pane)
+    ssh.ssh_menu(window, pane, { use_ssh_conf = true , connect_to_host= false, use_mux = true})
+  end)},
+   { key = 'h',          mods = "LEADER", action =  act.SplitHorizontal({args = {"htop"} })},
    { key = 'w',          mods = mod.SUPER_ALL, action = act.CloseCurrentTab({ confirm = false }) },
 
    -- tabs: navigation
@@ -95,7 +109,7 @@ local keys = {
 
    -- window --
    -- spawn windows
-   { key = 'n',          mods = mod.SUPER,     action = act.SpawnWindow },
+   { key = 'g',          mods = mod.SUPER,     action = act.SpawnWindow },
 
    -- background controls --
    {
@@ -175,16 +189,15 @@ local keys = {
    },
 
    {
-      key = 'q',
-      mods = 'LEADER',
-      action = act.SplitHorizontal({ args = { 'ssh' , 'qiyuan', "-t", "/home/hanxv/.local/share/bin/zellij a sa"}}),
+      key = 'k',
+      mods = mod.SUPER,
+      action = act.ActivateKeyTable({
+         name = 'workspace_mode',
+         one_shot = false,
+         timemout_miliseconds = 1000,
+      }),
    },
 
-   {
-      key = 'c',
-      mods = 'LEADER',
-      action = act.SplitHorizontal({ args = { 'ssh' , 'cent'}}),
-   },
    -- resize panes
    {
       key = 'p',
@@ -218,7 +231,14 @@ local key_tables = {
       { key = 'n', mods = mod.SUPER, action = act.CopyMode 'NextMatch' },
       { key = 'n', mods = mod.SUPER_SHIFT, action = act.CopyMode 'PriorMatch' },
       { key = 'Escape', mods = "NONE", action = act.CopyMode 'Close' },
-    }
+    },
+  workspace_mode = {
+      { key = 'j', action = act.SwitchWorkspaceRelative(1) },
+      { key = 'k', action = act.SwitchWorkspaceRelative(-1) },
+      { key = 'Escape', action = 'PopKeyTable' },
+      { key = 'Enter', action = 'PopKeyTable' },
+      { key = 'q',      action = 'PopKeyTable' },
+  }
   }
 
 local mouse_bindings = {

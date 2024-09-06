@@ -27,6 +27,7 @@ end
 
 local _set_title = function(process_name, base_title, max_width, inset, tab)
    local title
+   local min_width = 3  -- 设置一个最小宽度
    inset = inset or 6
    process_name = tab.tab_title or process_name
    if process_name:len() > 0 then
@@ -34,10 +35,16 @@ local _set_title = function(process_name, base_title, max_width, inset, tab)
    else
       title = base_title
    end
-  -- title = tab:get_title()
+
+   -- 截断过长的标题
    if title:len() > max_width - inset then
       local diff = title:len() - max_width + inset
       title = wezterm.truncate_right(title, title:len() - diff)
+   end
+
+   -- 填充过短的标题
+   if title:len() < min_width then
+      title = title .. string.rep(' ', min_width - title:len())
    end
 
    return title
