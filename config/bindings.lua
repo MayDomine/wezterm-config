@@ -109,7 +109,7 @@ local keys = {
 
    -- window --
    -- spawn windows
-   { key = 'g',          mods = mod.SUPER,     action = act.SpawnWindow },
+   { key = 'n',          mods = mod.SUPER_SHIFT,     action = act.SpawnWindow },
 
    -- background controls --
    {
