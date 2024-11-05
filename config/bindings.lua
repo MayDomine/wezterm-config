@@ -2,6 +2,7 @@ local wezterm = require('wezterm')
 local platform = require('utils.platform')()
 local backdrops = require('utils.backdrops')
 local ssh = require('plugins.ssh_menu')
+local workspace = require('config.workspace')
 local act = wezterm.action
 
 local mod = {}
@@ -93,7 +94,7 @@ local keys = {
     ssh.ssh_menu(window, pane, { use_ssh_conf = true , connect_to_host= false, use_mux = true})
   end)},
    { key = 'h',          mods = "LEADER", action =  act.SplitHorizontal({args = {"htop"} })},
-   { key = 'w',          mods = mod.SUPER_ALL, action = act.CloseCurrentTab({ confirm = false }) },
+   { key = 'w',          mods = mod.SUPER_ALL, action = act.CloseCurrentTab({ confirm = true }) },
 
    -- tabs: navigation
    { key = '1',          mods = mod.SUPER,     action = act.ActivateTab(0) },
@@ -230,16 +231,39 @@ local key_tables = {
   search_mode = {
       { key = 'n', mods = mod.SUPER, action = act.CopyMode 'NextMatch' },
       { key = 'n', mods = mod.SUPER_SHIFT, action = act.CopyMode 'PriorMatch' },
-      { key = 'Escape', mods = "NONE", action = act.CopyMode 'Close' },
+      { key = 'p', mods = mod.SUPER, action = act.CopyMode 'Close' },
+      { key = 'f', mods = mod.SUPER, action = act.CopyMode 'Close' },
     },
   workspace_mode = {
       { key = 'j', action = act.SwitchWorkspaceRelative(1) },
       { key = 'k', action = act.SwitchWorkspaceRelative(-1) },
+      { key = 'n', action =  wezterm.action_callback(function(window, pane)
+        ssh.ssh_menu(window, pane, { use_ssh_conf = true , connect_to_host= false, use_mux = true})
+      end)},
+
+      { key = 'w', action = wezterm.action_callback(function(window, pane, line)
+        local domain_name = pane:get_domain_name(pane)
+        window:perform_action(
+        act.Multiple{
+          "PopKeyTable",
+          act.DetachDomain {DomainName = domain_name}
+        } ,pane)
+      end)
+      },
+      {
+        key = 'd', action = wezterm.action_callback(function(window, pane)
+        local w = window:active_workspace()
+        workspace.kill_workspace(w, window, pane)
+      end)
+      },
+      { key = 'q', action = 'PopKeyTable' },
+      { key = 'Escape', action = 'PopKeyTable' },
+      { key = 'Enter', action = 'PopKeyTable' },
       { key = 'Escape', action = 'PopKeyTable' },
       { key = 'Enter', action = 'PopKeyTable' },
       { key = 'q',      action = 'PopKeyTable' },
-  }
-  }
+  },
+}
 
 local mouse_bindings = {
    -- Ctrl-click will open the link under the mouse cursor
