@@ -83,6 +83,9 @@ function M.ssh_menu(window, pane, opts)
    end
 
    window:perform_action(
+
+        act.Multiple{
+          "PopKeyTable",
       act.InputSelector({
          action = wezterm.action_callback(function(window, pane, id, label)
             if not id and not label then
@@ -104,27 +107,14 @@ function M.ssh_menu(window, pane, opts)
                      .. clean_host
                      .. (port ~= '' and (':' .. port) or '')
                )
-               local func
-               -- if not opts.split_in_window then
-               --    func = wezterm.action.SpawnCommandInNewTab
-               -- else
-               --    func = wezterm.action.SplitHorizontal
-               -- end
                if opts.use_mux then
                   window:perform_action(act.SwitchToWorkspace({
-                      name = 'SSH:' .. clean_host,
+                     name = 'SSH:' .. clean_host,
                      spawn = {
                         domain = { DomainName = 'SSHMUX:' .. clean_host },
                         label = 'SSH:' .. clean_host,
                      },
                   }), pane)
-                  -- window:perform_action(
-                  --    func({
-                  --       domain = { DomainName = 'SSHMUX:' .. clean_host },
-                  --       label = 'SSH:' .. clean_host,
-                  --    }),
-                  --    pane
-                  -- )
                else
                   window:perform_action(
                      wezterm.action.SplitHorizontal({
@@ -141,7 +131,7 @@ function M.ssh_menu(window, pane, opts)
          alphabet = '123456789', -- TODO: find a way to show key before entry in the menu
          description = wezterm.nerdfonts.md_ssh
             .. " --> Select the number key the host for SSH connection ! Press '/' to start FuzzySearch <--",
-      }),
+      }),},
       pane
    )
 end
