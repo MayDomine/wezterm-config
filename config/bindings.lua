@@ -38,6 +38,26 @@ local keys = {
       end),
     },
    },
+  {
+    key = 'r',
+    mods = mod.SUPER_SHIFT,
+    action = act.PromptInputLine {
+      description = 'Enter new name for workspace',
+      action = wezterm.action_callback(function(window, pane, line)
+        -- line will be `nil` if they hit escape without entering anything
+        -- An empty string if they just hit enter
+        -- Or the actual line of text they wrote
+        if line then
+          -- window:active_tab():set_title(line)
+          -- tab
+        wezterm.mux.rename_workspace(
+          wezterm.mux.get_active_workspace(),
+          line
+        )
+        end
+      end),
+    },
+   },
    { key = 'e', mods = mod.SUPER, action = act.ShowLauncherArgs({ flags = 'FUZZY|TABS' }) },
    {
       key = 'n',
@@ -259,9 +279,6 @@ local key_tables = {
       { key = 'q', action = 'PopKeyTable' },
       { key = 'Escape', action = 'PopKeyTable' },
       { key = 'Enter', action = 'PopKeyTable' },
-      { key = 'Escape', action = 'PopKeyTable' },
-      { key = 'Enter', action = 'PopKeyTable' },
-      { key = 'q',      action = 'PopKeyTable' },
   },
 }
 
