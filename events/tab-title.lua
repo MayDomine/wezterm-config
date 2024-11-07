@@ -27,18 +27,23 @@ end
 
 local _set_title = function(process_name, base_title, max_width, inset, tab)
    local title
-   local min_width = 3  -- 设置一个最小宽度
-   inset = inset or 6
+   local min_width = 6  -- 设置一个最小宽度
+   local max_width = 20
+   inset = inset or 0
    process_name = tab.tab_title or process_name
-   if process_name:len() > 0 then
-      title = process_name .. ' ~ ' .. base_title
-   else
-      title = base_title
-   end
+    if process_name:len() > 0 then
+        if tab.tab_title then
+            title = tab.tab_title
+        else
+            title = process_name .. ' ~ ' .. base_title
+        end
+    else
+        title = base_title
+    end
 
    -- 截断过长的标题
    if title:len() > max_width - inset then
-      local diff = title:len() - max_width + inset
+      local diff = title:len() - max_width + inset 
       title = wezterm.truncate_right(title, title:len() - diff)
    end
 
@@ -46,7 +51,6 @@ local _set_title = function(process_name, base_title, max_width, inset, tab)
    if title:len() < min_width then
       title = title .. string.rep(' ', min_width - title:len())
    end
-
    return title
 end
 
@@ -96,6 +100,13 @@ M.setup = function()
             break
          end
       end
+      local _tab_index = nil
+      for i, tab_info in ipairs(_tabs) do
+         if tab_info.tab_id == tab.tab_id then
+             _tab_index = tab_info.tab_index + 1
+            break
+         end
+      end
 
       -- Left semi-circle
       _push('rgba(0, 0, 0, 0.4)', bg, { Intensity = 'Bold' }, GLYPH_SEMI_CIRCLE_LEFT)
@@ -106,12 +117,13 @@ M.setup = function()
       end
 
       -- Title
+      _push(bg, fg, { Intensity = 'Bold' }, ' #' .. _tab_index)
       _push(bg, fg, { Intensity = 'Bold' }, ' ' .. title)
 
       -- Unseen output alert
-      if has_unseen_output then
-         _push(bg, '#FFA066', { Intensity = 'Bold' }, ' ' .. GLYPH_CIRCLE)
-      end
+      -- if has_unseen_output then
+      --    _push(bg, '#FFA066', { Intensity = 'Bold' }, ' ' .. GLYPH_CIRCLE)
+      -- end
 
       -- Right padding
       _push(bg, fg, { Intensity = 'Bold' }, ' ')

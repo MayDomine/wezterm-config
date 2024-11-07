@@ -3,8 +3,8 @@ local gpu_adapters = require('utils.gpu_adapter')
 local colors = require('colors.custom')
 
 return {
-   animation_fps = 60,
-   max_fps = 60,
+   animation_fps = 120,
+   max_fps = 120,
    front_end = 'WebGpu',
    webgpu_power_preference = 'HighPerformance',
    webgpu_preferred_adapter = gpu_adapters:pick_best(),
@@ -33,8 +33,8 @@ return {
    enable_tab_bar = true,
    hide_tab_bar_if_only_one_tab = false,
    use_fancy_tab_bar = false,
-   tab_max_width = 25,
-   show_tab_index_in_tab_bar = false,
+   tab_max_width = 50,
+   show_tab_index_in_tab_bar = true,
    switch_to_last_active_tab_when_closing_tab = true,
 
    -- window
