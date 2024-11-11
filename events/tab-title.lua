@@ -121,9 +121,9 @@ M.setup = function()
       _push(bg, fg, { Intensity = 'Bold' }, ' ' .. title)
 
       -- Unseen output alert
-      -- if has_unseen_output then
-      --    _push(bg, '#FFA066', { Intensity = 'Bold' }, ' ' .. GLYPH_CIRCLE)
-      -- end
+      if has_unseen_output then
+         _push(bg, '#FFA066', { Intensity = 'Bold' }, ' ' .. GLYPH_CIRCLE)
+      end
 
       -- Right padding
       _push(bg, fg, { Intensity = 'Bold' }, ' ')

@@ -3,7 +3,6 @@ return {
    -- ref: https://wezfurlong.org/wezterm/config/lua/SshDomain.html
    ssh_domains = wezterm.default_ssh_domains(),
    -- ref: https://wezfurlong.org/wezterm/multiplexing.html#unix-domains
-   default_domain = 'local-socket',
    unix_domains = {
       {
          name = 'local-socket',
