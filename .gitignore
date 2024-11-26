@@ -3,3 +3,6 @@
 /lua_modules
 /.luarocks
 .DS_Store
+*.jpg
+*.jpeg
+*.png
