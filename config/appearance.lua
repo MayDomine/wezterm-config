@@ -8,26 +8,28 @@ return {
    front_end = 'WebGpu',
    webgpu_power_preference = 'HighPerformance',
    webgpu_preferred_adapter = gpu_adapters:pick_best(),
+   window_decorations = 'RESIZE',
 
    -- color scheme
    colors = colors,
 
    -- background
    background = {
-      {
-         source = { File = wezterm.GLOBAL.background },
-         horizontal_align = 'Center',
-      },
+      -- {
+      --    source = { File = wezterm.GLOBAL.background },
+      --    horizontal_align = 'Center',
+      -- },
       {
          source = { Color = colors.background },
          height = '100%',
          width = '100%',
-         opacity = 0.96,
+         opacity = 0.80,
       },
    },
+   macos_window_background_blur = 20,
 
    -- scrollbar
-   enable_scroll_bar = true,
+   enable_scroll_bar = false,
 
    -- tab bar
    enable_tab_bar = true,
@@ -39,10 +41,10 @@ return {
 
    -- window
    window_padding = {
-      left = 5,
-      right = 10,
-      top = 12,
-      bottom = 7,
+      left = 0,
+      right = 0,
+      top = 0,
+      bottom = 0,
    },
    window_close_confirmation = 'NeverPrompt',
    window_frame = {

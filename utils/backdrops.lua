@@ -35,7 +35,7 @@ end
 ---
 --- INFO:
 ---   During the initial load of the config, this function can only invoked in `wezterm.lua`.
----   WezTerm's fs utility `read_dir` (used in this function) works by running on a spawned child process.
+---   WezTerm's fs utility `read_dir` (used in this function) wSwitchToWorkspacecorks by running on a spawned child process.
 ---   This throws a coroutine error if the function is invoked in outside of `wezterm.lua` in the -
 ---   initial load of the Terminal config.
 function BackDrops:set_files()
@@ -50,15 +50,15 @@ end
 function BackDrops:_set_opt(window)
    local opts = {
       background = {
-         {
-            source = { File = wezterm.GLOBAL.background },
-            horizontal_align = 'Center',
-         },
+         -- {
+         --    source = { File = wezterm.GLOBAL.background },
+         --    horizontal_align = 'Center',
+         -- },
          {
             source = { Color = colors.background },
             height = '100%',
             width = '100%',
-            opacity = 0.96,
+            opacity = 0.80,
          },
       },
    }

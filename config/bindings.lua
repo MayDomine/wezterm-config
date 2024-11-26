@@ -4,7 +4,6 @@ local backdrops = require('utils.backdrops')
 local ssh = require('plugins.ssh_menu')
 local workspace = require('config.workspace')
 local act = wezterm.action
-
 local mod = {}
 
 if platform.is_mac then

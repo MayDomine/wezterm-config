@@ -1,6 +1,7 @@
 -- A slightly altered version of catppucchin mocha
 local mocha = {
    rosewater = '#f5e0dc',
+  white = '#DDDDDD',
    flamingo = '#f2cdcd',
    pink = '#f5c2e7',
    mauve = '#cba6f7',
@@ -24,42 +25,44 @@ local mocha = {
    surface1 = '#45475a',
    surface0 = '#313244',
    base = '#1f1f28',
+   kitty_blue = '#031E2B',
+  kitty_curosr = "#59e1e3",
    mantle = '#181825',
    crust = '#11111b',
 }
 
 local colorscheme = {
-   foreground = mocha.text,
-   background = mocha.base,
-   cursor_bg = mocha.rosewater,
+   foreground = mocha.white,
+   background = mocha.kitty_blue,
+   cursor_bg = mocha.kitty_curosr,
    cursor_border = mocha.rosewater,
    cursor_fg = mocha.crust,
    selection_bg = mocha.surface2,
    selection_fg = mocha.text,
    ansi = {
       '#0C0C0C', -- black
-      '#C50F1F', -- red
-      '#13A10E', -- green
+      '#ff16b0', -- red
+      '#b3f361', -- green
       '#C19C00', -- yellow
       '#0037DA', -- blue
       '#881798', -- magenta/purple
-      '#3A96DD', -- cyan
+      '#59e1e3', -- cyan
       '#CCCCCC', -- white
    },
    brights = {
       '#767676', -- black
       '#E74856', -- red
-      '#16C60C', -- green
-      '#F9F1A5', -- yellow
+      '#b3f361', -- green
+      '#ffea16', -- yellow
       '#3B78FF', -- blue
       '#B4009E', -- magenta/purple
-      '#61D6D6', -- cyan
+      '#59e1e3', -- cyan
       '#F2F2F2', -- white
    },
    tab_bar = {
-      background = 'rgba(0, 0, 0, 0.4)',
+      background = 'rgba(0, 0, 0, 0)',
       active_tab = {
-         bg_color = mocha.surface2,
+         bg_color = mocha.surface0,
          fg_color = mocha.text,
       },
       inactive_tab = {
@@ -71,7 +74,7 @@ local colorscheme = {
          fg_color = mocha.text,
       },
       new_tab = {
-         bg_color = mocha.base,
+         bg_color = 'rgba(0, 0, 0, 0)',
          fg_color = mocha.text,
       },
       new_tab_hover = {
