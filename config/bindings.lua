@@ -2,9 +2,35 @@ local wezterm = require('wezterm')
 local platform = require('utils.platform')()
 local backdrops = require('utils.backdrops')
 local ssh = require('plugins.ssh_menu')
+local scrollback = require('plugins.scrollback')
 local workspace = require('config.workspace')
 local act = wezterm.action
 local mod = {}
+
+local dump_scrollback_to_file = function(window, pane)
+    -- Retrieve the current viewport's text.
+    -- Pass an optional number of lines (eg: 2000) to retrieve
+    -- that number of lines starting from the bottom of the viewport
+    local scrollback = pane:get_lines_as_text(pane:get_dimensions().scrollback_rows);
+    -- Create a temporary file to pass to vim
+    local name = os.tmpname();
+    local f = io.open(name, "w+");
+    f:write(scrollback);
+    f:flush();
+    f:close();
+    return name
+end
+
+wezterm.on("trigger-vim-with-scrollback", function(window, pane)
+  local filename = dump_scrollback_to_file(window, pane)
+  -- Open a new window running fzf to fuzzy search scrollback
+  print("dumping scrollback to file")
+  window:perform_action(wezterm.action{SpawnCommandInNewWindow={
+    args={"zsh", "-c", "nvim < " .. filename},
+    domain = 'DefaultDomain',
+  },
+  }, pane)
+end)
 
 if platform.is_mac then
    mod.SUPER = 'SUPER'
@@ -19,6 +45,10 @@ end
 -- stylua: ignore
 local keys = {
    -- misc/useful --
+  --
+    {
+    key="o", mods=mod.SUPER_SHIFT,
+      action=wezterm.action{EmitEvent="trigger-vim-with-scrollback"}},
    { key = 'p', mods = mod.SUPER, action = 'ActivateCopyMode' },
    { key = 'p', mods = mod.SUPER_SHIFT, action = act.ActivateCommandPalette },
    { key = 'e', mods = mod.SUPER_SHIFT, action = act.ShowLauncher },
@@ -60,7 +90,7 @@ local keys = {
    { key = 'e', mods = mod.SUPER, action = act.ShowLauncherArgs({ flags = 'FUZZY|TABS' }) },
    {
       key = 'n',
-      mods = mod.SUPER,
+      mods = mod.SUPER_SHIFT,
       action = act.ShowLauncherArgs({ flags = 'FUZZY|WORKSPACES' }),
    },
    { key = 'F11', mods = 'NONE',    action = act.ToggleFullScreen },
@@ -133,7 +163,9 @@ local keys = {
 
    -- window --
    -- spawn windows
-   { key = 'n',          mods = mod.SUPER_SHIFT,     action = act.SpawnWindow },
+   { key = '-',          mods = mod.SUPER_SHIFT,     action = act.SpawnWindow },
+   { key = 'j', mods = mod.SUPER, action = act.SwitchWorkspaceRelative(1) },
+   { key = 'k', mods = mod.SUPER, action = act.SwitchWorkspaceRelative(-1) },
 
    -- background controls --
    {
@@ -167,7 +199,7 @@ local keys = {
          fuzzy_description = 'Select Background: ',
          action = wezterm.action_callback(function(window, _pane, idx)
             ---@diagnostic disable-next-line: param-type-mismatch
-            backdrops:set_img(window, tonumber(idx))
+            -- backdrops:set_img(window, tonumber(idx))
          end),
       }),
    },
@@ -194,6 +226,9 @@ local keys = {
    { key = 'j',     mods = mod.SUPER_REV, action = act.ActivatePaneDirection('Down') },
    { key = 'h',     mods = mod.SUPER_REV, action = act.ActivatePaneDirection('Left') },
    { key = 'l',     mods = mod.SUPER_REV, action = act.ActivatePaneDirection('Right') },
+    { key = 'n', mods = mod.SUPER, action =  wezterm.action_callback(function(window, pane)
+      ssh.ssh_menu(window, pane, { use_ssh_conf = true , connect_to_host= false, use_mux = true})
+    end)},
    {
       key = 'p',
       mods = mod.SUPER_REV,
@@ -212,15 +247,15 @@ local keys = {
       }),
    },
 
-   {
-      key = 'k',
+  {
+    key = '-',
       mods = mod.SUPER,
       action = act.ActivateKeyTable({
          name = 'workspace_mode',
          one_shot = false,
          timemout_miliseconds = 1000,
-      }),
-   },
+    }),
+  },
 
    -- resize panes
    {

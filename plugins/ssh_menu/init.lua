@@ -117,12 +117,10 @@ function M.ssh_menu(window, pane, opts)
                   }), pane)
                else
                   window:perform_action(
-                     wezterm.action.SplitHorizontal({
-                        args = ssh_command,
-                        label = 'SSH:' .. clean_host,
-                     }),
-                     pane
-                  )
+                     wezterm.action.SpawnTab({
+                        DomainName = "SSHMUX:" ..  clean_host,
+                     })
+                  , pane)
                end
             end
          end),
