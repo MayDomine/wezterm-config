@@ -15,9 +15,9 @@ local __cells__ = {} -- wezterm FormatItems (ref: https://wezfurlong.org/wezterm
 
 -- stylua: ignore
 local colors = {
-   default   = { bg = 'rgba(0, 72, 86, 1.0)', fg = 'rgba(28, 27, 25, 1.0)' },
-   is_active = { bg = 'rgba(49, 187, 185, 1.0)', fg = 'rgba(17, 17, 27, 1.0)' },
-   hover     = { bg = 'rgba(88, 125, 140, 1.0)', fg = 'rgba(28, 27, 25, 1.0)' },
+   default   = { bg = 'rgba(0, 72, 86, 1.0)', fg = 'rgba(28, 27, 25, 0.0)' },
+   is_active = { bg = 'rgba(49, 187, 185, 1.0)', fg = 'rgba(17, 17, 27, 0.0)' },
+   hover     = { bg = 'rgba(88, 125, 140, 1.0)', fg = 'rgba(28, 27, 25, 0.0)' },
 }
 
 local _set_process_name = function(s)
@@ -109,7 +109,7 @@ M.setup = function()
       end
 
       -- Left semi-circle
-      _push('rgba(0, 0, 0, 0.4)', bg, { Intensity = 'Bold' }, GLYPH_SEMI_CIRCLE_LEFT)
+      _push('rgba(0, 0, 0, 0)', bg, { Intensity = 'Bold' }, GLYPH_SEMI_CIRCLE_LEFT)
 
       -- Admin Icon
       if is_admin then
@@ -129,7 +129,7 @@ M.setup = function()
       _push(bg, fg, { Intensity = 'Bold' }, ' ')
 
       -- Right semi-circle
-      _push('rgba(0, 0, 0, 0.4)', bg, { Intensity = 'Bold' }, GLYPH_SEMI_CIRCLE_RIGHT)
+      _push('rgba(0, 0, 0, 0)', bg, { Intensity = 'Bold' }, GLYPH_SEMI_CIRCLE_RIGHT)
 
       return __cells__
    end)

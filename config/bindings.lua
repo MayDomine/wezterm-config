@@ -21,6 +21,7 @@ local dump_scrollback_to_file = function(window, pane)
     return name
 end
 
+
 wezterm.on("trigger-vim-with-scrollback", function(window, pane)
   local filename = dump_scrollback_to_file(window, pane)
   -- Open a new window running fzf to fuzzy search scrollback
@@ -45,6 +46,18 @@ end
 -- stylua: ignore
 local keys = {
    -- misc/useful --
+  {
+    key = 'f',
+    mods = mod.SUPER_ALL,
+    action = wezterm.action.ToggleFullScreen,
+  },
+  {
+    key = 'k',
+    mods = "LEADER",
+    action = act.ClearScrollback 'ScrollbackAndViewport',
+
+  },
+
   --
     {
     key="o", mods=mod.SUPER_SHIFT,
@@ -143,7 +156,7 @@ local keys = {
     ssh.ssh_menu(window, pane, { use_ssh_conf = true , connect_to_host= false, use_mux = true})
   end)},
    { key = 'h',          mods = "LEADER", action =  act.SplitHorizontal({args = {"htop"} })},
-   { key = 'w',          mods = mod.SUPER_ALL, action = act.CloseCurrentTab({ confirm = true }) },
+   { key = 'w',          mods = mod.SUPER, action = act.CloseCurrentTab({ confirm = true }) },
 
    -- tabs: navigation
    { key = '1',          mods = mod.SUPER,     action = act.ActivateTab(0) },

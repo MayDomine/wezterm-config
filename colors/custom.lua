@@ -70,7 +70,7 @@ local colorscheme = {
          fg_color = mocha.subtext1,
       },
       inactive_tab_hover = {
-         bg_color = mocha.surface0,
+         bg_color = 'rgba(0, 0, 0, 0)',
          fg_color = mocha.text,
       },
       new_tab = {
@@ -78,7 +78,7 @@ local colorscheme = {
          fg_color = mocha.text,
       },
       new_tab_hover = {
-         bg_color = mocha.mantle,
+         bg_color = 'rgba(0, 0, 0, 0)',
          fg_color = mocha.text,
          italic = true,
       },

@@ -5,7 +5,7 @@ local colors = require('colors.custom')
 return {
    animation_fps = 120,
    max_fps = 120,
-   front_end = 'WebGpu',
+   front_end = 'OpenGL',
    webgpu_power_preference = 'HighPerformance',
    webgpu_preferred_adapter = gpu_adapters:pick_best(),
    window_decorations = 'RESIZE',
@@ -23,7 +23,7 @@ return {
          source = { Color = colors.background },
          height = '100%',
          width = '100%',
-         opacity = 0.80,
+         opacity = 0.93,
       },
    },
    macos_window_background_blur = 20,

@@ -33,13 +33,13 @@ local charging_icons = {
 
 local colors = {
    date_fg = '#fab387',
-   date_bg = 'rgba(0, 0, 0, 0.4)',
+   date_bg = 'rgba(0, 0, 0, 0)',
    battery_fg = '#f9e2af',
-   battery_bg = 'rgba(0, 0, 0, 0.4)',
+   battery_bg = 'rgba(0, 0, 0, 0)',
    separator_fg = '#74c7ec',
-   separator_bg = 'rgba(0, 0, 0, 0.4)',
+   separator_bg = 'rgba(0, 0, 0, 0)',
    workspace_fg = '#7FB4CA',  -- 新增：workspace 颜色
-   workspace_bg = 'rgba(0, 0, 0, 0.4)',
+   workspace_bg = 'rgba(0, 0, 0, 0)',
 }
 
 local __cells__ = {} -- wezterm FormatItems (ref: https://wezfurlong.org/wezterm/config/lua/wezterm/format.html)
